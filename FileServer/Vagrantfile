@@ -1,0 +1,21 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+ENV['VAGRANT_SERVER_URL'] = 'https://vagrant.elab.pro'
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-24.04"
+# VM params
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "FileServerForPGER"
+    vb.gui = false
+    vb.memory = "2048"
+    vb.cpus = 1
+  end
+# Network
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
+# Folder sync
+  config.vm.synced_folder "./src", "/vagrant"
+# Shell
+  config.vm.provision "shell", path: "provision/unpack_go.sh"
+end
